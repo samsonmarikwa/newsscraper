@@ -1,0 +1,125 @@
+body {
+    box-sizing: content-box;
+    z-index: 0;
+    font-family: 'Alegreya Sans', 'Droid Sans', Arial, Helvetica, sans-serif;
+    font-size: 19px;
+    background-color: #107070;
+    height: 100%;
+    min-height: 100%;
+}
+
+.navbar {
+    background-color: #99d6ff;
+}
+
+.container-fluid {
+    margin-bottom: 20px;
+}
+
+li {
+    padding: 5px;
+    margin: 5px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.card-header {
+    background-color: #99d6ff;
+    color: #ffffff;
+    font-weight: 800;
+}
+
+.card {
+    margin-top: 12px;
+}
+
+.btn-danger {
+    margin-left: 15px;
+}
+
+.save-article {
+    background-color: #009999;
+}
+
+.btn {
+    font-weight: 700;
+    border: none;
+    width: 180px;
+    color: #000000;
+    padding: 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    /* margin-top: 10px; */
+    -webkit-transition-duration: 0.4s;
+    /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #004d80;
+    color: white;
+}
+
+.btn:active {
+    background-color: #009999;
+    box-shadow: 0 5px #666;
+    transform: translateY(10px);
+}
+
+.col-style {
+    height: 60px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+}
+
+.title {
+    height: 20px;
+    margin-top: 10px;
+}
+
+.noarticle-msg1 {
+    height: 60px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    color: #ffffff;
+    background-color: #ff8c1a;
+    text-align: center;
+}
+
+.noarticle-msg2 {
+    height: 60px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    font-weight: 800;
+    background-color: #99d6ff;
+    text-align: center;
+}
+
+.noarticle-msg3 {
+    height: 90px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.button-link {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    cursor: pointer;
+    font-weight: 800;
+    color: #0000ff;
+}
+
+.button-link:hover {
+    text-decoration: underline;
+    color: #009900;
+}

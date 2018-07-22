@@ -1,0 +1,62 @@
+<div class="container">
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+    <a class="navbar-brand" href="#">Mongo Scraper</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+<button class="btn btn-primary saved-articles"
+              id="saved-articles">Saved Articles</button>
+        <button class="btn btn-danger" id="scrape-new">Scrape New Articles</button>
+        <button class="btn btn-danger" id="clear-articles">Clear Articles</button>
+
+    </div>
+  </nav>
+</div>
+
+<div class="landing-page">
+  <img src="assets/img/newspaper.jpg" height="500px" width="100%">
+</div>
+
+
+<div class="container-fluid" id="cards">
+
+  <ul>
+    {{#each article}}
+
+    <div class="card shadow">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-sm-10 col-style">
+            <a class="title" href="{{this.link}}" target="_blank">{{this.title}}</a>
+          </div>
+          <div class="col-sm-2">
+            <button class="btn btn-primary save-article"
+              id="{{this._id}}"
+              title="{{this.title}}"
+              summary="{{this.summary}}"
+              link="{{this.link}}">Save Article</button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <p class="card-text">{{this.summary}}</p>
+      </div>
+
+    </div>
+    {{/each}}
+
+</div>
+
+
+</ul>
+
+</div>
