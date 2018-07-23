@@ -45,7 +45,6 @@ $(function() {
     }
 
 
-
     $("#clear-articles").on("click", (e) => {
         e.preventDefault();
         $.ajax({

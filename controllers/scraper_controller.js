@@ -40,7 +40,6 @@ router.get('/', (req, res) => {
 });
 
 
-
 //scrape articles
 router.get('/api/scrape', (req, res) => {
 
@@ -120,7 +119,6 @@ router.delete("/api/cleararticles", (req, res) => {
             });
         });
 });
-
 
 
 // save news articles to saved articles
