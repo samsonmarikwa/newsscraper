@@ -11,8 +11,9 @@ var cheerio = require('cheerio');
 // require all models
 var db = require('../models');
 
-// connect to the MongoDb
-var MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/scraper';
+var MONGO_REF = 'mongodb://heroku_rlstml5n:3f2baurpa8fej243lk21j001ip@ds147011.mlab.com:47011/heroku_rlstml5n';
+
+var MONGODB_URI = MONGO_REF || 'mongodb://localhost/scraper';
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
 
