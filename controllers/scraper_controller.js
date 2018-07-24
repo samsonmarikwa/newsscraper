@@ -1,5 +1,3 @@
-// load sensitive environmental data from .env file
-require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
@@ -13,9 +11,8 @@ var cheerio = require('cheerio');
 // require all models
 var db = require('../models');
 
-var MONGODB_URI = process.env.MONGODB_URI;
-// || 'mongodb://localhost/scraper';
-//mongoose.Promise = Promise;
+var MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/scraper';
+mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
 
 
@@ -89,24 +86,24 @@ router.get('/api/scrape', (req, res) => {
             var summary = $(element).find('p.summary ').text();
             var link = $(element).find('h4.title').find('a').attr('href');
 
-            if (title !== '' && title != null) {
+            if (title !== '' && title != null && summary !== '' && summary != null) {
                 result.title = title;
                 result.summary = summary;
                 result.link = link;
-            }
 
-            db.Article.create(result).then((dbArticle) => {
-                // console log the record written
-                console.log(dbArticle);
-            }).catch((err) => {
-                res.json({
-                    success: false,
-                    swalTitle: "Article Not Created",
-                    swalMsg: "Failed to create articles",
-                    swalIcon: "error"
+                db.Article.create(result).then((dbArticle) => {
+                    // console log the record written
+                    console.log(dbArticle);
+                }).catch((err) => {
+                    res.json({
+                        success: false,
+                        swalTitle: "Article Not Created",
+                        swalMsg: "Failed to create articles",
+                        swalIcon: "error"
+                    });
+
                 });
-
-            });
+            }
         });
         res.json({
             success: true,
