@@ -7,14 +7,14 @@ var mongoose = require('mongoose');
 // It works on the client and server
 var axios = require('axios');
 var cheerio = require('cheerio');
-
+/* 
 // require all models
 var db = require('../models');
 
 var MONGODB_URI = process.env.MONGO_URI || 'mongodb://localhost/scraper';
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
-
+ */
 // retrieve news articles from database
 router.get('/', (req, res) => {
     res.render("noarticles", {
