@@ -11,7 +11,10 @@ var cheerio = require('cheerio');
 // require all models
 var db = require('../models');
 
-var MONGODB_URI = process.env.MONGO_URI || 'mongodb://localhost/scraper';
+var MONGO_REF = 'mongodb://admin:PASSword123@ds147011.mlab.com:47011/scraper-samson';
+
+//var MONGODB_URI = process.env.MONGO_URI || 'mongodb://localhost/scraper';
+var MONGODB_URI = MONGO_REF;
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
 
