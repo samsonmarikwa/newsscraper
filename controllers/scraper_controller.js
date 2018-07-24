@@ -11,7 +11,7 @@ var cheerio = require('cheerio');
 // require all models
 var db = require('../models');
 
-var MONGO_REF = 'mongodb://admin:PASSword123@ds147011.mlab.com:47011/scraper-samson';
+var MONGO_REF = 'mongodb://admin:PASSword123@ds147391.mlab.com:47391/heroku_43vtwz2m';
 
 //var MONGODB_URI = process.env.MONGO_URI || 'mongodb://localhost/scraper';
 var MONGODB_URI = MONGO_REF;
