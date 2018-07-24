@@ -1,34 +1,16 @@
 $(function() {
 
-    $("#scrape-link").on("click", (e) => {
-        e.preventDefault();
+    // event listener for Scrape New Articles button
+    $("#scrape-new").on("click", () => {
         scrapeNews();
     });
 
-    $("#scrape-new").on("click", (e) => {
-        e.preventDefault();
+    // event listener for Try Scraping New Articles link
+    $("#scrape-link").on("click", () => {
         scrapeNews();
     });
 
-
-    $("#saved-articles").on("click", () => {
-
-        alert("Saved Articles");
-        $.ajax({
-            url: "/api/retrieve-saved",
-            method: "GET"
-        }).then((res) => {
-            if (res.success) {
-                swal(res.swalTitle,
-                    res.swalMsg,
-                    res.swalIcon).then(() => {
-                    location = "/api/retrieve-saved";
-                });
-            };
-        });
-    });
-
-
+    // scrape new articles function
     function scrapeNews() {
         $.ajax({
             url: "/api/scrape",
@@ -44,9 +26,9 @@ $(function() {
         });
     }
 
-
-    $("#clear-articles").on("click", (e) => {
-        e.preventDefault();
+    // clear articles event
+    $("#clear-articles").on("click", (event) => {
+        event.preventDefault();
         $.ajax({
             url: "/api/cleararticles",
             method: "DELETE"
@@ -61,30 +43,182 @@ $(function() {
 
     });
 
+    // event listener for Save Article button
+    // saves the article in the SavedArticles collection and
+    // deletes the article from the articles collection
 
-    $(".save-article").on("click", (e) => {
+    $(".save-article").on("click", (event) => {
 
-        console.log($(e.target).attr("id"));
-        console.log($(e.target).attr("title"));
-        console.log($(e.target).attr("summary"));
-        console.log($(e.target).attr("link"));
+        var id = $(event.target).attr("id");
 
         $.ajax({
             url: "/api/savearticle",
             method: "POST",
             data: {
-                id: $(e.target).attr("id"),
-                title: $(e.target).attr("title"),
-                summary: $(e.target).attr("summary"),
-                link: $(e.target).attr("link")
+                id: id,
+                title: $(event.target).attr("title"),
+                summary: $(event.target).attr("summary"),
+                link: $(event.target).attr("link")
             }
         }).then((res) => {
+            console.log(res);
+            if (res.success === true) {
+                swal(res.swalTitle,
+                    res.swalMsg,
+                    res.swalIcon).then(() => {
+                    $.ajax({
+                        url: "/api/deletearticle",
+                        method: "DELETE",
+                        data: {
+                            id: id
+                        }
+                    }).then((res) => {
 
+                        swal(res.swalTitle,
+                            res.swalMsg,
+                            res.swalIcon).then(() => {
+                            location = "/";
+                        });
+                    });
+                });
+            } else {
+                swal(res.swalTitle,
+                    res.swalMsg,
+                    res.swalIcon).then(() => {
+                    location = "/";
+                });
+            }
+
+        });
+    });
+
+
+    // event listener for Delete From Saved button
+    // deletes the article from the SavedArticles collection
+
+    $(".saved-delete").on("click", (event) => {
+
+        var id = $(event.target).attr("id");
+
+        $.ajax({
+            url: "/api/deletesaved",
+            method: "DELETE",
+            data: {
+                id: id
+            }
+        }).then((res) => {
             swal(res.swalTitle,
                 res.swalMsg,
                 res.swalIcon).then(() => {
-                location = "/";
+                location = "/saved";
             });
         });
+    });
+
+
+    // event listener for Article Notes
+    // create article notes
+    $(".article-notes").on("click", (event) => {
+
+        var id = $(event.target).attr("id");
+        var swalTitle = "Notes For Article: " + id;
+
+        // retrieve existing notes
+        $.ajax({
+            url: "/notes/" + id,
+            method: "GET"
+        }).then((result) => {
+            console.log(result[0]);
+
+            console.log(result[0].title);
+
+            if (result[0].notes.length > 0) {
+                var swalHTML = "<p>";
+
+                for (var x = 0; x < result[0].notes.length; x++) {
+                    console.log(result[0].notes[x].notes);
+                    /* 
+                                        swalHTML += '<p>' + result[0].notes[x].notes + '&nbsp;&nbsp;<button type="button" id="' + result[0].notes[x]._id + '" class="btn-danger delete-notes">X</button></p>';
+
+                     */
+                    swalHTML += '<p>' + result[0].notes[x].notes + '&nbsp;&nbsp;<button type="button" id="delete-notes" class="btn-danger delete-notes">X</button></p>';
+
+
+
+                    console.log(swalHTML);
+                }
+                swal({
+                    title: swalTitle,
+                    html: swalHTML,
+                    confirmButtonText: 'Cancel Delete'
+                }).then((result) => {
+
+                    console.log("Deleting notes");
+                });
+
+                /* 
+                    if (result.value) {
+                        $.ajax({
+                            url: "/api/save-notes",
+                            method: "POST",
+                            data: {
+                                articleId: id,
+                                notes: result.value
+                            }
+                        }).then((res) => {
+                            swal(res.swalTitle,
+                                res.swalMsg,
+                                res.swalIcon);
+                        });
+                    }
+         */
+
+
+            } else {
+                // no notes exist, so prompt user to create new notes
+
+                swal({
+                    title: swalTitle,
+                    input: 'textarea',
+                    inputPlaceholder: 'Type your notes here',
+                    showCancelButton: true,
+                    confirmButtonText: 'Save this note'
+                }).then((result) => {
+
+                    if (result.value) {
+                        $.ajax({
+                            url: "/api/save-notes",
+                            method: "POST",
+                            data: {
+                                articleId: id,
+                                notes: result.value
+                            }
+                        }).then((res) => {
+                            swal(res.swalTitle,
+                                res.swalMsg,
+                                res.swalIcon);
+                        });
+                    }
+
+
+                });
+
+
+            }
+
+        });
+
+
+    });
+
+
+
+    // event listener for Article Notes
+    // create article notes
+    $("#delete-notes").on("click", (event) => {
+
+        var id = $(event.target).attr("id");
+        alert("Delete button clicked")
+
     });
 });

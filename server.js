@@ -25,7 +25,7 @@ app.use(bodyparser.json());
 
 // set handlebars
 app.set('views', path.join(__dirname, 'views'));
-app.engine('handlebars', expHBS({ defaultLayout: 'main' }));
+app.engine('handlebars', expHBS({ extname: 'handlebars', defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 
 // import routes and give the server access to them

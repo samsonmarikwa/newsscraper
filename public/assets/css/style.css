@@ -123,3 +123,21 @@ ul {
     text-decoration: underline;
     color: #009900;
 }
+
+.saved-articles {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    cursor: pointer;
+}
+
+.saved-articles:hover {
+    text-decoration: underline;
+    font-weight: 800;
+    color: #009900;
+}
+
+.delete-notes:hover {
+    color: #0000ff;
+    font-weight: 900;
+}

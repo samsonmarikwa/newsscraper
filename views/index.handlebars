@@ -9,12 +9,13 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="#">Home
+          <a class="nav-link" href="/">Home
             <span class="sr-only">(current)</span>
           </a>
         </li>
-<button class="btn btn-primary saved-articles"
-              id="saved-articles">Saved Articles</button>
+        <li class="nav-item">
+          <a class="nav-link" href="/saved">Saved Articles</a>
+        </li>
         <button class="btn btn-danger" id="scrape-new">Scrape New Articles</button>
         <button class="btn btn-danger" id="clear-articles">Clear Articles</button>
 
@@ -29,7 +30,6 @@
 
 <div class="container-fluid" id="cards">
 
-  <ul>
     {{#each article}}
 
     <div class="card shadow">
@@ -39,11 +39,7 @@
             <a class="title" href="{{this.link}}" target="_blank">{{this.title}}</a>
           </div>
           <div class="col-sm-2">
-            <button class="btn btn-primary save-article"
-              id="{{this._id}}"
-              title="{{this.title}}"
-              summary="{{this.summary}}"
-              link="{{this.link}}">Save Article</button>
+            <button class="btn btn-primary save-article" id="{{this._id}}" title="{{this.title}}" summary="{{this.summary}}" link="{{this.link}}">Save Article</button>
           </div>
         </div>
       </div>
@@ -53,10 +49,5 @@
 
     </div>
     {{/each}}
-
-</div>
-
-
-</ul>
 
 </div>

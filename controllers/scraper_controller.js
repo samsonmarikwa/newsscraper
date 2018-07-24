@@ -18,7 +18,9 @@ var MONGODB_URI = process.env.MONGODB_URI;
 //mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
 
+
 // retrieve news articles from database
+// displays the index.handlebars or noarticles.handlebars views
 router.get('/', (req, res) => {
     db.Article.find({})
         .then((article) => {
@@ -39,8 +41,33 @@ router.get('/', (req, res) => {
                 });
             }
         });
+});
 
 
+// retrieve news articles from saved article database
+// switches the view to the saved.handlebars / nosaved.handlebars
+router.get('/saved', (req, res) => {
+    console.log("Retrieving Saved articles");
+    db.SavedArticle.find({})
+        .then((article) => {
+            console.log("Retrived saved news articles");
+            console.log(article);
+            if (article.length > 0) {
+                res.render("saved", {
+                    article: article
+                });
+            }
+
+            if (article.length < 1) {
+                res.render("nosaved", {
+                    msg1: "Uh Oh. Looks like we don't have any saved articles",
+                    msg2: "Would You Like To Browse Available Articles?",
+                    msg3: "Browse Articles"
+                });
+            }
+
+
+        });
 });
 
 
@@ -92,7 +119,6 @@ router.get('/api/scrape', (req, res) => {
 
 
 // clear news article from database
-
 router.delete("/api/cleararticles", (req, res) => {
     console.log("Deleting articles");
     db.Article.deleteMany({})
@@ -126,7 +152,6 @@ router.delete("/api/cleararticles", (req, res) => {
 
 
 // save news articles to saved articles
-
 router.post("/api/savearticle", (req, res) => {
     console.log("Saving articles");
     // create an empty result object
@@ -155,38 +180,143 @@ router.post("/api/savearticle", (req, res) => {
 });
 
 
-// retrieve news articles from saved article database
-router.get('/api/retrieve-saved', (req, res) => {
-    console.log("Retrieving Saved articles");
-    db.SavedArticle.find({})
-        .then((article) => {
-            console.log("Retrived saved news articles");
-            console.log(article);
-            if (article.length > 0) {
-                res.render("saved", {
-                    article: article
-                });
-            }
+// delete news articles from Articles collection
+router.delete("/api/deletearticle", (req, res) => {
+    console.log("Deleting articles");
 
-            if (article.length < 1) {
-                res.render("nosavedarticles", {
-                    msg1: "Uh Oh. Looks like we don't have any saved articles",
-                    msg2: "Would You Like To Browse Available Articles?",
-                    msg3: "Browse Articles"
-                });
-            }
+    var id = req.body.id;
+
+    db.Article.deleteOne({ _id: id }).then((result) => {
+        console.log(result);
+        if (result.n < 1) {
+            res.json({
+                success: false,
+                swalTitle: "Articles Collection",
+                swalMsg: "Failed to remove article from Article Collection",
+                swalIcon: "error"
+            });
+        } else {
+
+            res.json({
+                success: true,
+                swalTitle: "Articles Collection",
+                swalMsg: "News Article Removed From Article Collection",
+                swalIcon: "success"
+            });
+        }
+    });
+});
+
+
+// delete saved articles from the SavedArticle collection
+router.delete("/api/deletesaved", (req, res) => {
+    console.log("Deleting saved articles");
+
+    var id = req.body.id;
+
+    db.SavedArticle.deleteOne({ _id: id }).then((result) => {
+        console.log(result);
+        if (result.n < 1) {
+            res.json({
+                success: false,
+                swalTitle: "Saved Articles Collection",
+                swalMsg: "Failed to remove article from SavedArticle Collection",
+                swalIcon: "error"
+            });
+        } else {
+
+            res.json({
+                success: true,
+                swalTitle: "Saved Articles Collection",
+                swalMsg: "News Article Removed From SavedArticle Collection",
+                swalIcon: "success"
+            });
+        }
+    });
+});
+
+
+// save article notes
+router.post("/api/save-notes", (req, res) => {
+    console.log("Saving notes");
+
+    var note = {
+        notes: req.body.notes
+    }
+
+    db.Note.create(note).then((dbNote) => {
+        //save a note's id into a SavedArticle
+        return db.SavedArticle.findOneAndUpdate({ _id: req.body.articleId }, { $push: { notes: dbNote._id } }, { new: true });
+    }).then((dbSavedArticle) => {
+        if (dbSavedArticle.n < 1) {
+            res.json({
+                success: false,
+                swalTitle: "Saved Articles Collection",
+                swalMsg: "Failed to create notes for the saved article in SavedArticle Collection",
+                swalIcon: "error"
+            });
+        } else {
+
+            res.json({
+                success: true,
+                swalTitle: "Saved Articles Collection",
+                swalMsg: "Note created for the article in the SavedArticle Collection",
+                swalIcon: "success"
+            });
+        }
+    }).catch((err) => {
+        res.json({
+            success: false,
+            swalTitle: "Saved Articles Collection",
+            swalMsg: err,
+            swalIcon: "error"
+        });
+    });
+});
+
+// delete article notes from the SavedArticle collection
+router.delete("/api/deletenotes", (req, res) => {
+    console.log("Deleting saved articles notes");
+
+    var id = req.body.id;
+
+    db.SavedArticle.deleteOne({ _id: id }).then((result) => {
+        console.log(result);
+        if (result.n < 1) {
+            res.json({
+                success: false,
+                swalTitle: "Saved Articles Collection",
+                swalMsg: "Failed to remove article from SavedArticle Collection",
+                swalIcon: "error"
+            });
+        } else {
+
+            res.json({
+                success: true,
+                swalTitle: "Saved Articles Collection",
+                swalMsg: "News Article Removed From SavedArticle Collection",
+                swalIcon: "success"
+            });
+        }
+    });
+});
+
+
+// retrieve article notes from notes collection and saved article database
+// displays notes for a particular saved article
+router.get('/notes/:id?', (req, res) => {
+    console.log("Retrieving Saved articles notes");
+    var id = req.params.id;
+    console.log(id)
+    db.SavedArticle.find(id == undefined ? {} : { _id: id })
+        .populate("notes")
+        .then((article) => {
+            res.json(article);
         });
 });
 
 
-// delete saved artcles
-
-
-// retrieve article notes
-
-// save article notes 
-
-// delete article notes
+// 5b56d452b7afb632ec92f437
 
 // modify article notes
 

@@ -16,7 +16,12 @@ var ArticleSchema = new Schema({
     link: {
         type: String,
         trim: true
-    }
+    },
+    notes: [{
+        // store notes id n the array
+        type: Schema.Types.ObjectId,
+        ref: "Note"
+    }]
 });
 
 // create model from the above schema using mongoose's model method
