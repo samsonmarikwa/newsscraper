@@ -1,3 +1,5 @@
+// load sensitive environmental data from .env file
+require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
@@ -11,11 +13,9 @@ var cheerio = require('cheerio');
 // require all models
 var db = require('../models');
 
-var MONGO_REF = 'mongodb://admin:PASSword123@ds147391.mlab.com:47391/heroku_43vtwz2m';
-
-//var MONGODB_URI = process.env.MONGO_URI || 'mongodb://localhost/scraper';
-var MONGODB_URI = MONGO_REF;
-mongoose.Promise = Promise;
+var MONGODB_URI = process.env.MONGODB_URI;
+// || 'mongodb://localhost/scraper';
+//mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
 
 // retrieve news articles from database
