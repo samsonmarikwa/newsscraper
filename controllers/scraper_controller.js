@@ -7,46 +7,36 @@ var mongoose = require('mongoose');
 // It works on the client and server
 var axios = require('axios');
 var cheerio = require('cheerio');
-/* 
+
 // require all models
 var db = require('../models');
 
 var MONGODB_URI = process.env.MONGO_URI || 'mongodb://localhost/scraper';
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
- */
+
 // retrieve news articles from database
 router.get('/', (req, res) => {
-    res.render("noarticles", {
-        msg1: "Uh Oh. Looks like we don't have any new articles",
-        msg2: "What Would You Like To Do?",
-        msg3: "Try Scraping New Articles",
-        msg4: "Go to Saved Articles"
-    });
+    db.Article.find({})
+        .then((article) => {
+            console.log("Retrived news articles");
+            console.log(article);
+            if (article.length > 0) {
+                res.render("index", {
+                    article: article
+                });
+            }
 
-    /* 
+            if (article.length < 1) {
+                res.render("noarticles", {
+                    msg1: "Uh Oh. Looks like we don't have any new articles",
+                    msg2: "What Would You Like To Do?",
+                    msg3: "Try Scraping New Articles",
+                    msg4: "Go to Saved Articles"
+                });
+            }
+        });
 
-        db.Article.find({})
-            .then((article) => {
-                console.log("Retrived news articles");
-                console.log(article);
-                if (article.length > 0) {
-                    res.render("index", {
-                        article: article
-                    });
-                }
-
-                if (article.length < 1) {
-                    res.render("noarticles", {
-                        msg1: "Uh Oh. Looks like we don't have any new articles",
-                        msg2: "What Would You Like To Do?",
-                        msg3: "Try Scraping New Articles",
-                        msg4: "Go to Saved Articles"
-                    });
-                }
-            });
-
-     */
 
 });
 
