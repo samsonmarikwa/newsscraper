@@ -11,33 +11,43 @@ var cheerio = require('cheerio');
 // require all models
 var db = require('../models');
 
-var MONGO_REF = 'mongodb://heroku_rlstml5n:3f2baurpa8fej243lk21j001ip@ds147011.mlab.com:47011/heroku_rlstml5n';
-
-var MONGODB_URI = MONGO_REF || 'mongodb://localhost/scraper';
+var MONGODB_URI = process.env.MONGO_URI || 'mongodb://localhost/scraper';
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
 
 // retrieve news articles from database
 router.get('/', (req, res) => {
-    db.Article.find({})
-        .then((article) => {
-            console.log("Retrived news articles");
-            console.log(article);
-            if (article.length > 0) {
-                res.render("index", {
-                    article: article
-                });
-            }
+    res.render("noarticles", {
+        msg1: "Uh Oh. Looks like we don't have any new articles",
+        msg2: "What Would You Like To Do?",
+        msg3: "Try Scraping New Articles",
+        msg4: "Go to Saved Articles"
+    });
 
-            if (article.length < 1) {
-                res.render("noarticles", {
-                    msg1: "Uh Oh. Looks like we don't have any new articles",
-                    msg2: "What Would You Like To Do?",
-                    msg3: "Try Scraping New Articles",
-                    msg4: "Go to Saved Articles"
-                });
-            }
-        });
+    /* 
+
+        db.Article.find({})
+            .then((article) => {
+                console.log("Retrived news articles");
+                console.log(article);
+                if (article.length > 0) {
+                    res.render("index", {
+                        article: article
+                    });
+                }
+
+                if (article.length < 1) {
+                    res.render("noarticles", {
+                        msg1: "Uh Oh. Looks like we don't have any new articles",
+                        msg2: "What Would You Like To Do?",
+                        msg3: "Try Scraping New Articles",
+                        msg4: "Go to Saved Articles"
+                    });
+                }
+            });
+
+     */
+
 });
 
 
