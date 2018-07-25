@@ -35,14 +35,19 @@
   <div class="card shadow">
     <div class="card-header">
       <div class="row">
-        <div class="col-sm-8 col-style">
+        <div class="col-sm-6 col-style">
           <a class="title" href="{{this.link}}" target="_blank">{{this.title}}</a>
         </div>
         <div class="col-sm-2">
           <button class="btn btn-primary saved-delete" id="{{this._id}}" title="{{this.title}}" summary="{{this.summary}}" link="{{this.link}}">Delete From Saved</button>
         </div>
+        <div class="col-sm-1">
+        </div>
+
         <div class="col-sm-2">
           <button class="btn btn-primary article-notes" id="{{this._id}}" title="{{this.title}}" summary="{{this.summary}}" link="{{this.link}}">Article Notes</button>
+        </div>
+        <div class="col-sm-1">
         </div>
       </div>
     </div>

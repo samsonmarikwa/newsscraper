@@ -48,14 +48,14 @@ ul {
 .btn {
     font-weight: 700;
     border: none;
-    width: 180px;
+    width: 156px;
     color: #000000;
-    padding: 16px;
+    padding: 10px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 18px;
-    /* margin-top: 10px; */
+    margin: 10px;
     -webkit-transition-duration: 0.4s;
     /* Safari */
     transition-duration: 0.4s;
