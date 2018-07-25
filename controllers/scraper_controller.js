@@ -304,9 +304,4 @@ router.get('/notes/:id?', (req, res) => {
         });
 });
 
-
-// 5b56d452b7afb632ec92f437
-
-// modify article notes
-
 module.exports = router;

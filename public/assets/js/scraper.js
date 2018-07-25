@@ -27,6 +27,7 @@ $(function() {
     }
 
     // clear articles event
+    // clears articles in the Artcles collection and redirects to root
     $("#clear-articles").on("click", (event) => {
         event.preventDefault();
         $.ajax({
@@ -128,37 +129,40 @@ $(function() {
             url: "/notes/" + id,
             method: "GET"
         }).then((result) => {
-            console.log(result[0]);
-
-            console.log(result[0].title);
 
             if (result[0].notes.length > 0) {
-                var swalHTML = ("<p>");
-
-
+                var swalHTML = "";
 
                 for (var x = 0; x < result[0].notes.length; x++) {
                     console.log(result[0].notes[x].notes);
 
-                    //      swalHTML += result[0].notes[x].notes + '&nbsp;&nbsp;<button type="button" id="delete-notes" class="btn-danger delete-notes">X</button></p>';
+                    swalHTML += '<p>' + result[0].notes[x].notes + '&nbsp;&nbsp;<a href="/api/deletenotes/' + id + '/' + result[0].notes[x]._id + '" class="btn-danger" id="delete-notes">X</a></p>';
 
-                    swalHTML += result[0].notes[x].notes + '&nbsp;&nbsp;<a href="/api/deletenotes/' + id + '/' + result[0].notes[x]._id + '" class="btn-danger" id="delete-notes">X</a>';
-
-
-
-                    console.log(swalHTML);
                 }
                 swal({
                     title: swalTitle,
                     html: swalHTML,
-                    confirmButtonText: 'Cancel Delete'
+                    input: 'textarea',
+                    showCloseButton: true,
+                    showCancelButton: true,
+                    inputPlaceholder: 'Type your notes here',
+                    cancelButtonText: 'Cancel',
+                    confirmButtonText: 'Save New Note'
                 }).then((result) => {
-
-                    swal(res.swalTitle,
-                        res.swalMsg,
-                        res.swalIcon).then(() => {
-                        location = "/notes/" + id;
-                    });
+                    if (result.value) {
+                        $.ajax({
+                            url: "/api/save-notes",
+                            method: "POST",
+                            data: {
+                                articleId: id,
+                                notes: result.value
+                            }
+                        }).then((res) => {
+                            swal(res.swalTitle,
+                                res.swalMsg,
+                                res.swalIcon);
+                        });
+                    }
                 });
 
             } else {
@@ -187,17 +191,13 @@ $(function() {
                         });
                     }
 
-
                 });
-
 
             }
 
         });
 
-
     });
-
 
 
     // event listener for Article Notes
