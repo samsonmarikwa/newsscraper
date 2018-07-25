@@ -272,27 +272,19 @@ router.post("/api/save-notes", (req, res) => {
 });
 
 // delete article notes from the SavedArticle collection
-router.delete("/api/deletenotes", (req, res) => {
+router.get("/api/deletenotes/:articleId/:noteId", (req, res) => {
     console.log("Deleting saved articles notes");
 
-    var id = req.body.id;
+    var articleId = req.params.articleId;
+    var noteId = req.params.noteId;
 
-    db.SavedArticle.deleteOne({ _id: id }).then((result) => {
+    // delete notes first from the Notes collection
+    db.Note.deleteOne({ _id: noteId }).then((result) => {
         console.log(result);
-        if (result.n < 1) {
-            res.json({
-                success: false,
-                swalTitle: "Saved Articles Collection",
-                swalMsg: "Failed to remove article from SavedArticle Collection",
-                swalIcon: "error"
-            });
-        } else {
-
-            res.json({
-                success: true,
-                swalTitle: "Saved Articles Collection",
-                swalMsg: "News Article Removed From SavedArticle Collection",
-                swalIcon: "success"
+        if (result.n > 0) {
+            db.SavedArticle.update({ _id: articleId }, { $pull: { "notes": noteId } }).then((result) => {
+                console.log(result);
+                res.redirect('/saved');
             });
         }
     });
